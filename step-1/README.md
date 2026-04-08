@@ -12,7 +12,6 @@ Construir o "Mínimo Viável" (MVP) que permita registrar a entrada e saída de 
 ---
 
 ## 🚀 Funcionalidades Esperadas
-- [ ] **Cadastro de Veículos:** Suporte para Placa, Modelo e Tipo (Carro ou Moto).
 - [ ] **Check-in:** Registrar a entrada de um veículo capturando a data/hora atual.
 - [ ] **Check-out:** Registrar a saída de um veículo buscando-o pela placa.
 - [ ] **Cálculo de Tarifa:**
