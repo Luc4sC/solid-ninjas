@@ -22,7 +22,7 @@ Construir o "Mínimo Viável" (MVP) que permita registrar a entrada e saída de 
 ---
 
 ## 📏 Regras de Negócio Iniciais
-1. **Arredondamento:** Qualquer fração de hora deve ser cobrada como uma hora cheia (ex: 1h e 5min deve ser cobrado como 1 hora e, 1h e 40min deve ser cobrado como 2 horas).
+1. **Arredondamento:** 1h e 5min deve ser cobrado como 1 hora e, 1h e 40min deve ser cobrado como 2 horas, porém essa regra só vale acima de 1 hora, qualquer valor abaixo disso deve ser cobrado o minímo de 1 hora.
 2. **Identificação:** A placa é o identificador único. Não podem existir dois veículos com a mesma placa no pátio simultaneamente.
 3. **Persistência:** Os dados devem ser mantidos em memória (ex: `List` ou `Map`) enquanto a aplicação estiver rodando.
 
