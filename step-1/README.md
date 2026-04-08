@@ -33,7 +33,6 @@ Para guiar o início do seu desenvolvimento, considere criar:
 
 * `Veiculo`: Classe base (ou pai) contendo os atributos comuns.
 * `Ticket`: Classe para associar o veículo aos registros de tempo.
-* `EstacionamentoService`: Onde ficará a lógica principal de entrada, saída e cálculo.
 
 ---
 
