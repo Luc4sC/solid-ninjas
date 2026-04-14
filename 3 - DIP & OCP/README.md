@@ -1,47 +1,44 @@
-# 🏎️ Smart Parking & Care - Etapa 3: OCP & DIP
+## 📜 Etapa 3: A Maestria Jônin (OCP, DIP & O Tratado das Aldeias)
 
-Nesta fase, o projeto deixa de ser um sistema "fixo" e passa a ser uma estrutura **plugável**. Aplicaremos o **Princípio Aberto/Fechado (OCP)** e o **Princípio da Inversão de Dependência (DIP)** para garantir que o núcleo do sistema seja protegido contra mudanças externas.
+Nesta fase, o sistema de Konoha se expande para integrar a "Aliança Shinobi". Agora, o processamento de missões deve suportar não apenas a Vila da Folha, mas também outras aldeias como **Suna (Areia)** e **Kirigakure (Névoa)**, cada uma com suas próprias regras fiscais.
 
----
+### 🎯 Objetivos Técnicos
+- **OCP (Open/Closed Principle):** O sistema deve ser capaz de receber novos Ranks de missão e novas Aldeias sem que o código do `ProcessadorMissao` precise ser modificado.
+- **DIP (Dependency Inversion Principle):** O `ProcessadorMissao` deixará de instanciar classes concretas e passará a depender de **Interfaces**.
 
-## 🎯 Objetivo da Etapa
-Transformar o sistema em uma estrutura modular onde as peças (cálculo, armazenamento, exibição) podem ser trocadas como blocos de montar, utilizando **Abstrações (Interfaces)** em vez de implementações concretas.
+### 🛠️ A Refatoração: Rumo à Extensibilidade
 
----
+#### 1. Abstração de Ranks (Fim do Switch Case)
+O cálculo por Rank (D, C, B, A, S) agora é extraído para uma interface.
+- **Interface:** `RegraCalculoRank` com o método `double calcular(double valorBase)`.
+- **Implementações:** `CalculoRankD`, `CalculoRankC`, `CalculoRankB`, `CalculoRankA`, `CalculoRankS`.
 
-## 🏗️ O que deve ser feito
+#### 2. O Desafio das Aldeias (Abstração de Impostos)
+Para suportar o Tratado das Aldeias, a lógica de impostos foi abstraída:
+- **Interface:** `Tributacao` com o método `double aplicar(double valor)`.
+- **Implementações:** - `ImpostoKonoha`: Aplica 5%.
+  - `ImpostoSuna`: Aplica 10%.
+  - `ImpostoKiri`: Aplica 8%.
 
-### 1. Aplicando o OCP (Open-Closed Principle)
-O motor de cálculo não deve mais conter lógica fixa (`if/else`) para decidir preços com base no tipo de veículo ou data.
-* **Ação:** Criar uma interface para a estratégia de tarifação (ex: `TarifaStrategy`).
-* **Meta:** Permitir a criação de novas regras (Tarifa de Domingo, Tarifa VIP, Promoção) apenas criando novas classes, sem precisar abrir ou modificar o `EstacionamentoService`.
+#### 3. Injeção de Dependência
+O `ProcessadorMissao` agora recebe as interfaces necessárias via **Construtor**. Isso permite que o sistema seja montado de diferentes formas (ex: Missão Rank S em Suna) sem alterar o orquestrador.
 
-### 2. Aplicando o DIP (Dependency Inversion Principle)
-A lógica de negócio não deve mais "saber" como os dados são salvos ou como o cálculo é realizado internamente.
-* **Ação:** Remover todos os instanciamientos diretos (`new`) de dentro do `EstacionamentoService`.
-* **Inversão:** O Service deve receber suas ferramentas (Calculadora, Repositório, Printer) através do **construtor**. Ele passa a depender de contratos (interfaces) e não de classes específicas.
+### 🏗️ Estrutura de Código (DIP em Ação)
 
+```java
+public class ProcessadorMissao {
+    private final RegraCalculoRank regra;
+    private final Tributacao tributo;
 
+    // O processador agora depende de abstrações, não de implementações (DIP)
+    public ProcessadorMissao(RegraCalculoRank regra, Tributacao tributo) {
+        this.regra = regra;
+        this.tributo = tributo;
+    }
 
-### 3. Desacoplamento de Infraestrutura
-Isolar completamente a forma como as informações são persistidas.
-* **Ação:** Criar uma interface para o Repositório de Tickets.
-* **Meta:** O sistema deve ser capaz de trocar o armazenamento de "Memória" para "Banco de Dados" ou "Arquivo TXT" apenas trocando a implementação injetada no Service, sem alterar a regra de negócio.
-
----
-
-## 📏 O Teste do "Ninja"
-Você saberá que concluiu esta etapa com sucesso se:
-
-1. **Extensibilidade:** Conseguir adicionar um novo modelo de cobrança apenas criando uma classe nova, sem tocar no código do Service.
-2. **Testabilidade:** Conseguir testar o `EstacionamentoService` passando versões "Mock" ou "Fake" das dependências.
-3. **Abstração:** O `EstacionamentoService` não conhece nenhuma classe concreta de infraestrutura, apenas interfaces.
-
----
-
-## 📝 Mudança de Visão
-Nesta etapa, você deixa de programar focado em **"Como eu faço isso?"** e passa a programar focado em **"O que eu preciso que seja feito?"**. O Service define o contrato, e o mundo externo provê as ferramentas.
-
----
-
-> **Próxima Parada:** LSP (Liskov Substitution Principle) - Refinando a hierarquia de veículos!
+    public void processar(Ninja ninja, Missao missao) {
+        double valorBruto = regra.calcular(missao.getValorBase());
+        double valorLiquido = tributo.aplicar(valorBruto);
+    }
+}
+```

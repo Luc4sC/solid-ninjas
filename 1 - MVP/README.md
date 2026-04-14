@@ -1,47 +1,42 @@
-# 🏎️ Smart Parking & Care - Etapa 1: O MVP Funcional
+## 📜 Etapa 1: O Despertar do Código Genin (MVP)
 
-Este projeto faz parte de uma série de estudos práticos sobre os princípios **SOLID** aplicados em Java, inspirados na leitura do livro *SOLID para Ninjas*. O objetivo desta primeira etapa é criar um sistema funcional de gerenciamento de estacionamento, permitindo que a "dificuldade de manutenção" surja naturalmente para ser resolvida através de refatoração nas etapas seguintes.
+Nesta primeira fase, o foco é a **funcionalidade bruta**. O objetivo é criar um código "Genin": funciona, mas é desorganizado, difícil de manter e com responsabilidades misturadas.
 
----
+### 🎯 Objetivos Técnicos
+- Criar um código funcional, porém **procedural**.
+- Utilizar **Classes Anêmicas** (classes que possuem apenas dados, sem comportamento).
+- Centralizar toda a lógica em uma única **God Class** (`ProcessadorMissao`).
+- Ignorar, propositalmente, os princípios SOLID para fins de comparação posterior.
 
-## 🎯 Objetivo da Etapa
-Construir o "Mínimo Viável" (MVP) que permita registrar a entrada e saída de veículos (Carros e Motos) e calcular o valor devido com base no tempo de permanência. 
+### 🧮 Regras de Negócio (Cálculos)
+O sistema deve calcular o valor final líquido da missão seguindo esta ordem:
 
-> **💡 Nota Mental:** Nesta fase, o foco é **funcionalidade**. É permitido que a lógica de negócio, o cálculo e a exibição estejam acoplados. Isso servirá de "âncora" para sentirmos a necessidade do **SOLID** no futuro.
+1.  **Valor Base por Rank**:
+    - **Rank D**: Valor base original.
+    - **Rank C**: +10% sobre o valor base.
+    - **Rank B**: +20% sobre o valor base.
+    - **Rank A**: +50% sobre o valor base.
+    - **Rank S**: +100% sobre o valor base (dobro).
 
----
+2.  **Bônus de Graduação**:
+    - Se o Ninja for um **Jônin**, ele recebe um bônus adicional de **10%** sobre o valor acumulado até então.
 
-## 🚀 Funcionalidades Esperadas
-- [ ] **Check-in:** Registrar a entrada de um veículo capturando a data/hora atual.
-- [ ] **Check-out:** Registrar a saída de um veículo buscando-o pela placa.
-- [ ] **Cálculo de Tarifa:**
-    - **Carro:** R$ 10,00 por hora.
-    - **Moto:** R$ 5,00 por hora.
-- [ ] **Recibo:** Exibir um resumo detalhado no console ao finalizar a estadia.
+3.  **Imposto de Konoha**:
+    - Independente do ninja ou do rank, a Vila retira **5%** do valor total final para a manutenção da infraestrutura de Konoha.
 
----
+### 🏗️ Estrutura Sugerida
 
-## 📏 Regras de Negócio Iniciais
-1. **Arredondamento:** 1h e 5min deve ser cobrado como 1 hora e, 1h e 40min deve ser cobrado como 2 horas, porém essa regra só vale acima de 1 hora, qualquer valor abaixo disso deve ser cobrado o minímo de 1 hora.
-2. **Identificação:** A placa é o identificador único. Não podem existir dois veículos com a mesma placa no pátio simultaneamente.
-3. **Persistência:** Os dados devem ser mantidos em memória (ex: `List` ou `Map`) enquanto a aplicação estiver rodando.
+- **`Ninja`**: Atributos `nome`, `nivel` (Genin, Chunin, Jonin).
+- **`Missao`**: Atributos `id`, `rank` (D, C, B, A, S), `valorBase`.
+- **`ProcessadorMissao`**: Possui o método `processar(Ninja ninja, Missao missao)`.
+    - Deve conter os `ifs/switch` de cálculo.
+    - Deve imprimir o resultado no console.
+    - Deve simular a gravação de um log (ex: `System.out.println("Salvando log no arquivo...")`).
 
----
+### ✅ Validação do Comportamento Esperado
 
-## 🛠️ Sugestão de Estrutura de Classes
-Para guiar o início do seu desenvolvimento, considere criar:
-
-* `Veiculo`: Classe base (ou pai) contendo os atributos comuns.
-* `Ticket`: Classe para associar o veículo aos registros de tempo.
-
----
-
-## 📝 Exemplo de Saída Esperada (CLI)
-```text
---- Entrada Registrada ---
-Placa: ABC-1234 | Modelo: Honda Civic | Entrada: 14:00
-
---- Saída Finalizada ---
-Veículo: ABC-1234
-Permanência: 2 horas e 15 minutos
-Valor Total: R$ 30,00 (Tarifa: Carro)
+| Cenário | Entrada | Saída Esperada (Líquido) |
+| :--- | :--- | :--- |
+| **Missão Simples** | Rank D (1000 Ryōs) / Genin | **950.00** |
+| **Missão Rank A** | Rank A (1000 Ryōs) / Chunin | **1425.00** |
+| **Missão Elite** | Rank S (2000 Ryōs) / Jônin | **4180.00** |
