@@ -26,12 +26,11 @@ O sistema deve calcular o valor final líquido da missão seguindo esta ordem:
 
 ### 🏗️ Estrutura Sugerida
 
-- **`Ninja`**: Atributos `nome`, `nivel` (Genin, Chunin, Jonin).
-- **`Missao`**: Atributos `id`, `rank` (D, C, B, A, S), `valorBase`.
+- **`Ninja`**: Atributos `nome`, `graduação` (Genin, Chunin, Jonin), `Aldeia`, `Clã`.
+- **`Missao`**: Atributos `id`, `rank` (D, C, B, A, S), `recompensa`.
 - **`ProcessadorMissao`**: Possui o método `processar(Ninja ninja, Missao missao)`.
     - Deve conter os `ifs/switch` de cálculo.
     - Deve imprimir o resultado no console.
-    - Deve simular a gravação de um log (ex: `System.out.println("Salvando log no arquivo...")`).
 
 ### ✅ Validação do Comportamento Esperado
 

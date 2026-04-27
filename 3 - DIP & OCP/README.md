@@ -36,9 +36,10 @@ public class ProcessadorMissao {
         this.tributo = tributo;
     }
 
-    public void processar(Ninja ninja, Missao missao) {
+    public void processar(Missao missao) {
         double valorBruto = regra.calcular(missao.getValorBase());
-        double valorLiquido = tributo.aplicar(valorBruto);
+        double valorComBonus = valorBruto + calculaBonusPara(ninja);
+        double valorLiquido = tributo.aplicar(valorComBônus);
     }
 }
 ```

@@ -11,7 +11,7 @@ Nesta segunda fase, aplicamos o **Single Responsibility Principle (Princípio da
 A lógica que antes estava amontoada em um único método agora deve ser dividida em:
 
 1.  **`CalculadoraDeRecompensa`**: 
-    - Método `calcular(Ninja ninja, Missao missao)`
+    - Método `calcular(Missao missao)`
     - Responsável apenas por aplicar as porcentagens dos Ranks e o bônus por nível Ninja.
 2.  **`CalculadoraImposto`**:
     - Método `aplicarImposto(double valor)`
@@ -26,7 +26,8 @@ A lógica que antes estava amontoada em um único método agora deve ser dividid
 O `ProcessadorMissao` deve ficar parecido com isso:
 ```java
 public void processar(Ninja ninja, Missao missao) {
-    double valorBruto = calculadora.calcular(ninja, missao);
+    double valorBruto = calculadora.calcular(missao);
+    double valorComBonus = valorBruto + calculaBonusPara(ninja);
     double valorLiquido = impostos.aplicarImposto(valorBruto);
     
     repository.salvar(missao);
