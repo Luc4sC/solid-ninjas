@@ -28,10 +28,9 @@ Para respeitar o LSP, devemos garantir que o contrato da classe `Ninja` seja cum
 ### 🏗️ Exemplo de Estrutura (Substituibilidade)
 
 ```java
-// O Processador trata todos como Ninja
 public void processar(Ninja ninja, Missao missao) {
     double valorBruto = regraRank.calcular(missao.getValorBase());
-    double valorComBonus = valorBruto + ninja.obterBonusPorGraduacao(valorBruto);
+    double valorComBonus = valorBruto + ninja.obterBonus(valorBruto);
     double valorLiquido = tributo.aplicar(valorBruto);
 }
 ```
